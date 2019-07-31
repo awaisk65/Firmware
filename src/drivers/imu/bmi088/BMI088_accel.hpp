@@ -157,112 +157,112 @@
 class BMI088_accel : public BMI088, public px4::ScheduledWorkItem
 {
 public:
-    BMI088_accel(int bus, const char *path_accel, uint32_t device, enum Rotation rotation);
-    virtual ~BMI088_accel();
+	BMI088_accel(int bus, const char *path_accel, uint32_t device, enum Rotation rotation);
+	virtual ~BMI088_accel();
 
-    virtual int     init();
+	virtual int     init();
 
-    // Start automatic measurement.
-    void            start();
+	// Start automatic measurement.
+	void            start();
 
-    // We need to override the read_reg function from the BMI088 base class, because the accelerometer requires a dummy byte read before each read operation
-    virtual uint8_t   read_reg(unsigned reg);
+	// We need to override the read_reg function from the BMI088 base class, because the accelerometer requires a dummy byte read before each read operation
+	virtual uint8_t   read_reg(unsigned reg);
 
-    // We need to override the read_reg16 function from the BMI088 base class, because the accelerometer requires a dummy byte read before each read operation
-    virtual uint16_t read_reg16(unsigned reg);
+	// We need to override the read_reg16 function from the BMI088 base class, because the accelerometer requires a dummy byte read before each read operation
+	virtual uint16_t read_reg16(unsigned reg);
 
-    /**
-        * Diagnostics - print some basic information about the driver.
-        */
-    void            print_info();
+	/**
+	    * Diagnostics - print some basic information about the driver.
+	    */
+	void            print_info();
 
-    void            print_registers();
+	void            print_registers();
 
-    // deliberately cause a sensor error
-    void            test_error();
+	// deliberately cause a sensor error
+	void            test_error();
 
 protected:
 
-    virtual int     probe();
+	virtual int     probe();
 
 private:
 
-    PX4Accelerometer	_px4_accel;
+	PX4Accelerometer	_px4_accel;
 
-    perf_counter_t      _sample_perf;
-    perf_counter_t      _measure_interval;
-    perf_counter_t      _bad_transfers;
-    perf_counter_t      _bad_registers;
-    perf_counter_t      _duplicates;
+	perf_counter_t      _sample_perf;
+	perf_counter_t      _measure_interval;
+	perf_counter_t      _bad_transfers;
+	perf_counter_t      _bad_registers;
+	perf_counter_t      _duplicates;
 
-    // this is used to support runtime checking of key
-    // configuration registers to detect SPI bus errors and sensor
-    // reset
+	// this is used to support runtime checking of key
+	// configuration registers to detect SPI bus errors and sensor
+	// reset
 #define BMI088_ACCEL_NUM_CHECKED_REGISTERS 7
-    static const uint8_t    _checked_registers[BMI088_ACCEL_NUM_CHECKED_REGISTERS];
-    uint8_t         _checked_values[BMI088_ACCEL_NUM_CHECKED_REGISTERS];
-    uint8_t         _checked_bad[BMI088_ACCEL_NUM_CHECKED_REGISTERS];
+	static const uint8_t    _checked_registers[BMI088_ACCEL_NUM_CHECKED_REGISTERS];
+	uint8_t         _checked_values[BMI088_ACCEL_NUM_CHECKED_REGISTERS];
+	uint8_t         _checked_bad[BMI088_ACCEL_NUM_CHECKED_REGISTERS];
 
-    bool            _got_duplicate;
+	bool            _got_duplicate;
 
-    /**
-         * Stop automatic measurement.
-         */
-    void            stop();
+	/**
+	     * Stop automatic measurement.
+	     */
+	void            stop();
 
-    /**
-         * Reset chip.
-         *
-         * Resets the chip and measurements ranges, but not scale and offset.
-         */
-    int         reset();
+	/**
+	     * Reset chip.
+	     *
+	     * Resets the chip and measurements ranges, but not scale and offset.
+	     */
+	int         reset();
 
-    void     Run() override;
+	void     Run() override;
 
-    /**
-         * Fetch measurements from the sensor and update the report buffers.
-         */
-    void            measure();
+	/**
+	     * Fetch measurements from the sensor and update the report buffers.
+	     */
+	void            measure();
 
-    /**
-         * Modify a register in the BMI088_accel
-         *
-         * Bits are cleared before bits are set.
-         *
-         * @param reg       The register to modify.
-         * @param clearbits Bits in the register to clear.
-         * @param setbits   Bits in the register to set.
-         */
-    void            modify_reg(unsigned reg, uint8_t clearbits, uint8_t setbits);
+	/**
+	     * Modify a register in the BMI088_accel
+	     *
+	     * Bits are cleared before bits are set.
+	     *
+	     * @param reg       The register to modify.
+	     * @param clearbits Bits in the register to clear.
+	     * @param setbits   Bits in the register to set.
+	     */
+	void            modify_reg(unsigned reg, uint8_t clearbits, uint8_t setbits);
 
-    /**
-         * Write a register in the BMI088_accel, updating _checked_values
-         *
-         * @param reg       The register to write.
-         * @param value     The new value to write.
-         */
-    void            write_checked_reg(unsigned reg, uint8_t value);
+	/**
+	     * Write a register in the BMI088_accel, updating _checked_values
+	     *
+	     * @param reg       The register to write.
+	     * @param value     The new value to write.
+	     */
+	void            write_checked_reg(unsigned reg, uint8_t value);
 
-    /**
-         * Set the BMI088_accel measurement range.
-         *
-         * @param max_g     The maximum G value the range must support.
-         * @return      OK if the value can be supported, -EINVAL otherwise.
-         */
-    int         set_accel_range(unsigned max_g);
+	/**
+	     * Set the BMI088_accel measurement range.
+	     *
+	     * @param max_g     The maximum G value the range must support.
+	     * @return      OK if the value can be supported, -EINVAL otherwise.
+	     */
+	int         set_accel_range(unsigned max_g);
 
-    /**
-         * Set accel sample rate
-         */
-    int accel_set_sample_rate(float desired_sample_rate_hz);
+	/**
+	     * Set accel sample rate
+	     */
+	int accel_set_sample_rate(float desired_sample_rate_hz);
 
-    /*
-         * check that key registers still have the right value
-         */
-    void check_registers(void);
+	/*
+	     * check that key registers still have the right value
+	     */
+	void check_registers(void);
 
-    /* do not allow to copy this class due to pointer data members */
-    BMI088_accel(const BMI088_accel &);
-    BMI088_accel operator=(const BMI088_accel &);
+	/* do not allow to copy this class due to pointer data members */
+	BMI088_accel(const BMI088_accel &);
+	BMI088_accel operator=(const BMI088_accel &);
 
 };

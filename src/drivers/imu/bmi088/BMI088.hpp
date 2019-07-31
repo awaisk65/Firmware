@@ -55,42 +55,42 @@ class BMI088 : public device::SPI
 
 protected:
 
-    uint8_t         _whoami;    /** whoami result */
+	uint8_t         _whoami;    /** whoami result */
 
-    uint8_t         _register_wait;
-    uint64_t        _reset_wait;
+	uint8_t         _register_wait;
+	uint64_t        _reset_wait;
 
-    enum Rotation       _rotation;
+	enum Rotation       _rotation;
 
-    uint8_t         _checked_next;
+	uint8_t         _checked_next;
 
-    /**
-   * Read a register from the BMI088
-   *
-   * @param       The register to read.
-   * @return      The value that was read.
-   */
-    virtual uint8_t         read_reg(unsigned reg); // This needs to be declared as virtual, because the
-    virtual uint16_t        read_reg16(unsigned reg);
+	/**
+	* Read a register from the BMI088
+	*
+	* @param       The register to read.
+	* @return      The value that was read.
+	*/
+	virtual uint8_t         read_reg(unsigned reg); // This needs to be declared as virtual, because the
+	virtual uint16_t        read_reg16(unsigned reg);
 
-    /**
-   * Write a register in the BMI088
-   *
-   * @param reg       The register to write.
-   * @param value     The new value to write.
-   */
-    void            write_reg(unsigned reg, uint8_t value);
+	/**
+	* Write a register in the BMI088
+	*
+	* @param reg       The register to write.
+	* @param value     The new value to write.
+	*/
+	void            write_reg(unsigned reg, uint8_t value);
 
-    /* do not allow to copy this class due to pointer data members */
-    BMI088(const BMI088 &);
-    BMI088 operator=(const BMI088 &);
+	/* do not allow to copy this class due to pointer data members */
+	BMI088(const BMI088 &);
+	BMI088 operator=(const BMI088 &);
 
 public:
 
-    BMI088(const char *name, const char *devname, int bus, uint32_t device, enum spi_mode_e mode, uint32_t frequency,
-           enum Rotation rotation);
+	BMI088(const char *name, const char *devname, int bus, uint32_t device, enum spi_mode_e mode, uint32_t frequency,
+	       enum Rotation rotation);
 
-    virtual ~BMI088() = default;
+	virtual ~BMI088() = default;
 
 
 };
